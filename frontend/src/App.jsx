@@ -1,10 +1,10 @@
-import { MapContainer, TileLayer, Popup, Marker } from "react-leaflet";
+import { MapContainer, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import LocationMap from "./components/LocationMap";
-import storeIcon from "./assets/store.png";
+import StoreLocation from "./components/StoreLocation";
 
 function App() {
   const center = [13.838510043535697, 100.02535680572677];
@@ -28,11 +28,6 @@ function App() {
     lat: "",
     lng: "",
     radius: 0,
-  });
-
-  const storeMapIcon = L.icon({
-    iconUrl: storeIcon, // เปลี่ยนเป็น URL ของไอคอนที่คุณต้องการ
-    iconSize: [37, 37], // ขนาดไอคอน
   });
 
   // function to calculate distance between 2 points using Haversine Formular
@@ -151,27 +146,8 @@ function App() {
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-          {stores &&
-            stores.map((store) => {
-              return (
-                <Marker
-                  icon={storeMapIcon}
-                  eventHandlers={{
-                    click: () => {
-                      handleStoreClick(store);
-                    },
-                  }}
-                  position={[store.lat, store.lng]}
-                >
-                  <Popup>
-                    <b>{store.name}</b>
-                    <p>{store.address}</p>
-                    <p>{store.id}</p>
-                  </Popup>
-                </Marker>
-              );
-            })}
-          {/* Use Location here */}
+          {/* Store & My Location Components */}
+          <StoreLocation stores={stores} handleStoreClick={handleStoreClick} />
           <LocationMap setMyLocation={setMyLocation} myLocation={myLocation} />
         </MapContainer>
       </div>
