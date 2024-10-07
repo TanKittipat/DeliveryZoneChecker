@@ -1,15 +1,10 @@
-import {
-  MapContainer,
-  TileLayer,
-  Popup,
-  Marker,
-  useMapEvent,
-} from "react-leaflet";
+import { MapContainer, TileLayer, Popup, Marker } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import homeIcon from "./assets/home.png";
 import Swal from "sweetalert2";
+import LocationMap from "./components/LocationMap";
+import storeIcon from "./assets/store.png";
 
 function App() {
   const center = [13.838510043535697, 100.02535680572677];
@@ -29,15 +24,15 @@ function App() {
     });
   };
 
-  const myLocationIcon = L.icon({
-    iconUrl: homeIcon, // เปลี่ยนเป็น URL ของไอคอนที่คุณต้องการ
-    iconSize: [37, 37], // ขนาดไอคอน
-  });
-
   const [deliveryZone, setDeliveryZone] = useState({
     lat: "",
     lng: "",
     radius: 0,
+  });
+
+  const storeMapIcon = L.icon({
+    iconUrl: storeIcon, // เปลี่ยนเป็น URL ของไอคอนที่คุณต้องการ
+    iconSize: [37, 37], // ขนาดไอคอน
   });
 
   // function to calculate distance between 2 points using Haversine Formular
@@ -116,21 +111,6 @@ function App() {
     setDeliveryZone({ lat: store.lat, lng: store.lng, radius: store.radius });
   };
 
-  // Create new component in the same file
-  const LocationMap = () => {
-    useMapEvent({
-      click(e) {
-        const { lat, lng } = e.latlng;
-        setMyLocation({ lat, lng });
-      },
-    });
-    return (
-      <Marker icon={myLocationIcon} position={[myLocation.lat, myLocation.lng]}>
-        <Popup>My current location</Popup>
-      </Marker>
-    );
-  };
-
   useEffect(() => {
     const fetchStores = async () => {
       try {
@@ -171,16 +151,11 @@ function App() {
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-          {/* <Marker
-            icon={myLocationIcon}
-            position={[myLocation.lat, myLocation.lng]}
-          >
-            <Popup>My current location</Popup>
-          </Marker> */}
           {stores &&
             stores.map((store) => {
               return (
                 <Marker
+                  icon={storeMapIcon}
                   eventHandlers={{
                     click: () => {
                       handleStoreClick(store);
@@ -197,7 +172,7 @@ function App() {
               );
             })}
           {/* Use Location here */}
-          <LocationMap />
+          <LocationMap setMyLocation={setMyLocation} myLocation={myLocation} />
         </MapContainer>
       </div>
     </div>
