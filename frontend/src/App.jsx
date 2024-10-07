@@ -29,6 +29,11 @@ function App() {
     });
   };
 
+  const myLocationIcon = L.icon({
+    iconUrl: homeIcon, // เปลี่ยนเป็น URL ของไอคอนที่คุณต้องการ
+    iconSize: [37, 37], // ขนาดไอคอน
+  });
+
   const [deliveryZone, setDeliveryZone] = useState({
     lat: "",
     lng: "",
@@ -120,7 +125,7 @@ function App() {
       },
     });
     return (
-      <Marker position={[myLocation.lat, myLocation.lng]}>
+      <Marker icon={myLocationIcon} position={[myLocation.lat, myLocation.lng]}>
         <Popup>My current location</Popup>
       </Marker>
     );
@@ -166,9 +171,12 @@ function App() {
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-          <Marker position={[myLocation.lat, myLocation.lng]}>
+          {/* <Marker
+            icon={myLocationIcon}
+            position={[myLocation.lat, myLocation.lng]}
+          >
             <Popup>My current location</Popup>
-          </Marker>
+          </Marker> */}
           {stores &&
             stores.map((store) => {
               return (
